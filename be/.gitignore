@@ -1,0 +1,5 @@
+node_modules
+dist
+# .evn
+/src/generated/prisma
+

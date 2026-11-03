@@ -1,0 +1,62 @@
+{
+  "compilerOptions": {
+    // JavaScript version to compile to
+    "target": "ES2022",
+
+    // Generate CommonJS modules (works well with Express)
+    // "module": "CommonJS",
+    "module": "nodenext",
+
+    // How TypeScript resolves imported modules
+    // "moduleResolution": "Node",
+    "moduleResolution": "nodenext",
+
+    // Source folder
+    "rootDir": "./src",
+
+    // Compiled JavaScript output folder
+    "outDir": "./dist",
+
+    // Enable all strict type-checking options
+    "strict": true,
+
+    "ignoreDeprecations": "6.0",
+
+    // Allows default imports from CommonJS modules
+    // Example: import express from "express"
+    "esModuleInterop": true,
+
+    // Allows importing JSON files
+    // Example: import config from "./config.json"
+    "resolveJsonModule": true,
+
+    // Prevents file name casing issues across operating systems
+    "forceConsistentCasingInFileNames": true,
+
+    // Skip type checking of declaration (.d.ts) files for faster builds
+    "skipLibCheck": true,
+
+    // Generate .map files for easier debugging
+    "sourceMap": true,
+
+    // Don't report errors for unused local variables
+    "noUnusedLocals": false,
+
+    // Don't report errors for unused function parameters
+    "noUnusedParameters": false,
+
+    //for new typescript version no use of baseURL
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    // Include Node.js type definitions
+    "types": ["node"]
+  },
+
+  // Files/folders to compile
+  "include": ["src"],
+
+  // Ignore these folders
+  "exclude": ["node_modules", "dist"]
+}
