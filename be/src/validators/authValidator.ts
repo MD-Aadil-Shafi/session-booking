@@ -15,7 +15,9 @@ export const registerSchema = z.object({
     password: z.string().trim()
         .min(6, "Password must be at least 6 characters long.")
         .max(20, "Password must be at most 20 characters long."),
-    country: nameSchema("Country", 3, 60),
+    country: nameSchema("Country", 3, 60).optional(),
+    timezone: z.string(),
+    role: z.string().optional()
 })
 
 export const loginSchema = z.object({
