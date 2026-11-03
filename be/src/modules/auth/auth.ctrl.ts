@@ -6,6 +6,8 @@ hashPassword, verifyPassword, generateAccessToken, generateRefreshToken, revokeA
 import { asyncHandler } from '@/utils/asyncHandler.js'
 import {prisma} from '@/config/prisma.js'
 import { env } from '@/config/env.js';
+import { Role } from '@prisma/client'
+import { isValidTimezone } from '@/utils/timezone.js'
 
 type UserData = {
     email: string,
@@ -13,7 +15,9 @@ type UserData = {
     lastName: string,
     password: string,
     country?: string,
-    role: "USER" | "PROFESSIONAL",
+    age?: number
+    timezone: string,
+    role: Role
 
 
 }
@@ -21,6 +25,9 @@ type UserData = {
 export const register = asyncHandler(async(req:Request, res:Response)=>{
     let userData:UserData;
     userData = req.body;
+    if(!isValidTimezone(userData.timezone)){
+        throw new Error("Invalid Timezone");
+    }
 
     let user = await prisma.user.findUnique({
         where:{email: userData.email}
@@ -33,6 +40,8 @@ export const register = asyncHandler(async(req:Request, res:Response)=>{
         user = await prisma.user.create({
             data: {
             email: userData.email,
+            age: userData.age,
+            timezone: userData.timezone,
             role: userData.role,
             firstName: userData.firstName,
             lastName: userData.lastName,
