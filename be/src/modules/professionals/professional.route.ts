@@ -4,11 +4,12 @@ import {
   listProfessionals,
   getProfessional,
 } from "./professional.ctrl.js";
+import { authMiddleware } from "@/middlewares/authMiddleware.js";
 
 const router = Router();
 
-router.get("/", listProfessionals);
-router.get("/:id", getProfessional);
-router.put("/:id/working-hours", setWorkingHours);
+router.get("/", authMiddleware(["USER"]), listProfessionals);
+router.get("/:id", authMiddleware(["USER"]), getProfessional);
+router.put("/:id/working-hours", authMiddleware(["PROFESSIONAL"]), setWorkingHours);
 
 export default router;
