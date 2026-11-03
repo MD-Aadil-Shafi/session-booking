@@ -133,7 +133,6 @@ model Reminder {
 
   notification Notification?
 
-  @@unique([sessionId, userId, type])
   @@index([status, scheduledAt])
 }
 
