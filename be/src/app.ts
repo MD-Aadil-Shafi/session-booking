@@ -5,6 +5,7 @@ import { errorHandler } from './middlewares/errorMiddleware.js';
 import authRoutes from "@/modules/auth/auth.route.js"
 import professionalRoutes from "@/modules/professionals/professional.route.js"
 import availabilityRoutes from '@/modules/availability/availability.route.js'
+import sessionRoutes from '@/modules/sessions/session.route.js'
 
 export async function createApp(){
     const app = express();
@@ -22,7 +23,7 @@ export async function createApp(){
     app.use("/api/v1/auth", authRoutes);
     app.use("/api/v1/professional", professionalRoutes);
     app.use("/api/v1/availability", availabilityRoutes);
-    
+    app.use("/api/v1/session", sessionRoutes);
     
     app.use(errorHandler);
 

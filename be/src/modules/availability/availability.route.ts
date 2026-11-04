@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { getAvailableSlots } from "./availability.ctrl.js";
+import { getAvailableSlotsController } from "./availability.ctrl.js";
 
 const router = Router();
 
 router.get(
   "/:professionalId/available-slots",
-  getAvailableSlots
+  getAvailableSlotsController
 );
 
 export default router;

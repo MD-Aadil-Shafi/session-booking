@@ -20,6 +20,9 @@ export function errorHandler(
 
   // Prisma errors
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    console.error("Prisma Error Code:", err.code);
+    console.error("Prisma Error Meta:", err.meta);
+    console.error("Prisma Client Version:", err.clientVersion);
     switch (err.code) {
       case "P2002": {
         const target = err.meta?.target;
@@ -73,6 +76,10 @@ export function errorHandler(
   if (err instanceof Prisma.PrismaClientInitializationError) {
     err = new ApiError(503, "Database connection unavailable");
   }
+  if (err instanceof Error) {
+  console.error("Error Message:", err.message);
+  console.error("Error Stack:", err.stack);
+}
 
   const statusCode = err instanceof ApiError ? err.statusCode : 500;
 
@@ -85,6 +92,7 @@ export function errorHandler(
     url: req.originalUrl,
     error: err,
   });
+
 
   return res.status(statusCode).json({
     success: false,
