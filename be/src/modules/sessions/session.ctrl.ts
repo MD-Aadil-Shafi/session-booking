@@ -2,15 +2,17 @@ import { Request, Response } from "express";
 import { prisma } from "@/config/prisma.js";
 import { Prisma } from "@prisma/client";
 import { asyncHandler } from "@/utils/asyncHandler.js";
-
 import { getAvailableSlots } from "../availability/availability.service.js"
 import { createSessionReminders } from "./reminder.helper.js";
 import { ApiError } from "@/utils/apiError.utils.js";
+import { Role } from "@prisma/client";
+import { cancelSessionService, getMySessionsService, rescheduleSessionService } from "./session.service.js";
+import { success } from "zod";
 
 
 const SESSION_DURATION = 50;
 
-async function validateSlot(
+export async function validateSlot(
   professionalId: string,
   memberTimezone: string,
   startsAt: Date
@@ -69,7 +71,7 @@ export const bookSession = asyncHandler(
       },
     });
 
-    if (!member || member.role !== "USER") {
+    if (!member || member.role !== Role.MEMBER ) {
       throw new ApiError(404, "Member not found");
     }
 
@@ -143,3 +145,41 @@ console.log("Passed... L: 86")
     }
   }
 );
+
+
+export const cancelSession = asyncHandler(
+  async(req: Request, res: Response)=>{
+    const data = await cancelSessionService(
+      String(req.params.id),
+      req.user!.id,
+      req.user!.role
+    )
+    return res.status(200).json({success: true, data})
+  }
+)
+
+export const reschedule = asyncHandler(
+  async(req: Request, res: Response)=>{
+    const data = await rescheduleSessionService(
+      String(req.params.id),
+      req.user!.id,
+      req.body.startsAt
+    )
+    return res.status(200).json({success: true, data})
+  }
+)
+
+// GET /api/sessions/my?type=upcoming
+// GET /api/sessions/my?type=past
+export const mySession = asyncHandler(
+  async(req: Request, res: Response)=>{
+    const type = req.query.type === "past" ? "past" : "upcoming";
+
+    const data = await getMySessionsService(
+      req.user!.id,
+      req.user!.role,
+      type
+    )
+    return res.status(200).json({success: true, data})
+  }
+)

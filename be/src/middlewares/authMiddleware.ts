@@ -4,7 +4,7 @@ import { prisma } from "@/config/prisma.js";
 import { env } from "@/config/env.js";
 
 
-type Role = "USER" | "PROFESSIONAL"
+type Role = "MEMBER" | "PROFESSIONAL" | "USER" ;
 interface TokenPayload extends JwtPayload {
     id: string;
     //TODO

@@ -7,7 +7,8 @@ datasource db {
 }
 
 enum Role {
-  USER 
+  USER
+  MEMBER 
   PROFESSIONAL
 }
 
@@ -37,7 +38,7 @@ model User {
   email String @unique @db.VarChar(50)
   country String? @db.VarChar(60)
   age Int?
-  role Role @default(USER)
+  role Role @default(MEMBER)
   password String
   isActive Boolean @default(true)
   timezone String
