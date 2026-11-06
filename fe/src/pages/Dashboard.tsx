@@ -265,25 +265,31 @@ const MyBookings = () => {
     <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
       <h2 className="mb-1 flex items-center gap-2 text-base font-semibold text-gray-800">
         <FiList className="text-indigo-500" />
-        My Bookings
+        My Sessions
       </h2>
       <p className="mb-5 text-xs text-gray-400">
         View and manage your upcoming session bookings.
       </p>
 
-      {/* Empty state placeholder */}
       <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-gray-200 bg-gray-50 py-12 text-center">
         <FiCalendar size={32} className="text-gray-300" />
-        <p className="text-sm font-medium text-gray-500">No bookings yet</p>
-        <p className="text-xs text-gray-400">
-          Browse professionals and book your first session.
+        <p className="text-sm font-medium text-gray-500">
+          View all your upcoming and past sessions
         </p>
-        <button
-          onClick={() => navigate("/professionals")}
-          className="mt-1 rounded-lg bg-indigo-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700 transition-colors"
-        >
-          Find a Professional
-        </button>
+        <div className="flex gap-2 mt-1">
+          <button
+            onClick={() => navigate("/sessions")}
+            className="rounded-lg bg-indigo-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700 transition-colors"
+          >
+            My Sessions
+          </button>
+          <button
+            onClick={() => navigate("/professionals")}
+            className="rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100 transition-colors"
+          >
+            Find a Professional
+          </button>
+        </div>
       </div>
     </section>
   );

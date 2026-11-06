@@ -44,7 +44,7 @@ const getAllTimezones = () => {
 const Auth = () => {
   const {user} = useAppSelector(state => state.auth);
   // console.log('loading', loading)
-  if(user.email){
+  if((user as any)?.email){
     return <Navigate to="/dashboard"/>
   }
 

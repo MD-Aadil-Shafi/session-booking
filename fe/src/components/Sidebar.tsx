@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  FiChevronsRight,
-  FiHome,
-  FiMonitor,
-  FiUser,
-  FiMessageSquare,
-  FiLogOut,
-} from "react-icons/fi";
+import { FiChevronsRight, FiHome, FiMonitor, FiLogOut, FiCalendar } from "react-icons/fi";
 import { motion } from "motion/react";
 import type { IconType } from "react-icons";
 import { useNavigate, useLocation, Link } from "react-router-dom";
@@ -52,8 +45,7 @@ const Sidebar = () => {
   useEffect(()=>{
         if(location?.pathname == "/dashboard") return setSelected("Dashboard")
         if(location?.pathname == "/professionals") return setSelected("Professionals")
-        if(location?.pathname == "/profile") return setSelected("Profile")
-        if(location?.pathname?.includes("/chat/")) return setSelected("Chat")
+        if(location?.pathname == "/sessions") return setSelected("Sessions")
     },[location?.pathname])
 
   return (
@@ -85,19 +77,11 @@ const Sidebar = () => {
           notifs={5}
         />
         <Option
-          Icon={FiUser}
-          title="Profile"
+          Icon={FiCalendar}
+          title="Sessions"
           selected={selected}
           setSelected={setSelected}
           open={open}
-        />
-        <Option
-          Icon={FiMessageSquare}
-          title="Chat"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          isDisabled={true}
         />
       </div>
       <div 

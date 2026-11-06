@@ -7,6 +7,10 @@ import {
   type availabilityData,
   type workingHoursType,
 } from "../redux/slices/professionalSlice";
+import {
+  bookSessionAction,
+  clearBooked,
+} from "../redux/slices/sessionSlice";
 
 type Slot = availabilityData["slots"][number];
 import { FiArrowLeft, FiClock, FiGlobe, FiCalendar } from "react-icons/fi";
@@ -46,6 +50,7 @@ const ProfessionalProfile = () => {
   const { profProfile, availability, loading } = useAppSelector(
     (state) => state.professionals
   );
+  const { bookLoading, booked } = useAppSelector((state) => state.sessions);
 
   // Detect the user's local timezone
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -278,33 +283,75 @@ const ProfessionalProfile = () => {
 
               {/* Confirm booking bar */}
               {selectedSlot && selectedDate && (
-                <div className="mt-5 flex items-center justify-between rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3">
-                  <div>
-                    <p className="text-xs text-gray-500">Selected slot</p>
-                    <p className="text-sm font-semibold text-indigo-700">
-                      {formatDateLabel(selectedDate)}{" "}
-                      {timeOnly(
-                        slotsByDate[selectedDate].find(
-                          (s) => s.startsAt === selectedSlot
-                        )?.localStart ?? ""
-                      )}{" "}
-                      –{" "}
-                      {timeOnly(
-                        slotsByDate[selectedDate].find(
-                          (s) => s.startsAt === selectedSlot
-                        )?.localEnd ?? ""
-                      )}
-                    </p>
-                  </div>
-                  <button
-                    className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-700 transition-colors"
-                    onClick={() => {
-                      // booking action can be wired here
-                      alert(`Booking confirmed for ${selectedSlot}`);
-                    }}
-                  >
-                    Book Session
-                  </button>
+                <div className="mt-5 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3">
+                  {booked?.startsAt === selectedSlot ? (
+                    // ── Success state ──
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs text-emerald-600 font-semibold">✓ Session booked!</p>
+                        <p className="text-sm font-semibold text-indigo-700">
+                          {formatDateLabel(selectedDate)}{" "}
+                          {timeOnly(
+                            slotsByDate[selectedDate].find(
+                              (s) => s.startsAt === selectedSlot
+                            )?.localStart ?? ""
+                          )}{" "}
+                          –{" "}
+                          {timeOnly(
+                            slotsByDate[selectedDate].find(
+                              (s) => s.startsAt === selectedSlot
+                            )?.localEnd ?? ""
+                          )}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          dispatch(clearBooked());
+                          setSelectedSlot(null);
+                          navigate("/sessions");
+                        }}
+                        className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-700 transition-colors"
+                      >
+                        View My Sessions
+                      </button>
+                    </div>
+                  ) : (
+                    // ── Confirm state ──
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs text-gray-500">Selected slot</p>
+                        <p className="text-sm font-semibold text-indigo-700">
+                          {formatDateLabel(selectedDate)}{" "}
+                          {timeOnly(
+                            slotsByDate[selectedDate].find(
+                              (s) => s.startsAt === selectedSlot
+                            )?.localStart ?? ""
+                          )}{" "}
+                          –{" "}
+                          {timeOnly(
+                            slotsByDate[selectedDate].find(
+                              (s) => s.startsAt === selectedSlot
+                            )?.localEnd ?? ""
+                          )}
+                        </p>
+                      </div>
+                      <button
+                        disabled={bookLoading}
+                        className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-700 disabled:opacity-60 transition-colors"
+                        onClick={() => {
+                          if (!profProfile?.id) return;
+                          dispatch(
+                            bookSessionAction({
+                              professionalId: profProfile.id,
+                              startsAt: selectedSlot,
+                            })
+                          );
+                        }}
+                      >
+                        {bookLoading ? "Booking…" : "Book Session"}
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </>
