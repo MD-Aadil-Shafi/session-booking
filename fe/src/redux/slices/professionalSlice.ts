@@ -39,7 +39,7 @@ export const getSingProfAction = createAsyncThunk(
                     ...authTokenHeader
                 }
             })
-            return res.data
+            return res.data?.data
 
         }catch(err:any){
             errorToast(err)
@@ -61,11 +61,20 @@ type hoursDataType = {
     startTime: string;
     endTime: string;
 }
+
+type addWorkingHoursPayload = {
+    hours: hoursDataType[];
+}
+
 export const addWorkingHoursAction = createAsyncThunk(
     '/professional/setHours',
-    async(value: hoursDataType[], {rejectWithValue})=>{
+    async(value: addWorkingHoursPayload, {rejectWithValue})=>{
         try{
-            const res = await axios.post(`${baseUrl}/professional/working-hours`, value)
+            const res = await axios.put(`${baseUrl}/professional/working-hours`, value,{
+                headers:{
+                    ...authTokenHeader
+                }
+            })
             toast.success(res?.data?.message || "Hours updated successfully.")
             return res?.data?.data;
         }catch(err:any){
@@ -83,12 +92,12 @@ export const getAvailabilityAction = createAsyncThunk(
     '/professional/availability',
     async(value:getAvailabilityPayload, {rejectWithValue})=>{
         try{
-            let res = await axios.get(`${baseUrl}availability/${value.professional_id}/available-slots?timezone=${value.timezone}`,{
+            let res = await axios.get(`${baseUrl}/availability/${value.professional_id}/available-slots?timezone=${value.timezone}`,{
                 headers:{
                     ...authTokenHeader
                 }
             })
-            return res.data
+            return res.data?.data
 
         }catch(err:any){
             errorToast(err)
@@ -112,7 +121,7 @@ interface addedHoursDataType extends hoursDataType {
     professionalId: string;
 }
 
-type workingHoursType = {
+export type workingHoursType = {
     id: string;
     professionalId: string;
     dayOfWeek: number;
