@@ -45,6 +45,7 @@ npm run test
 Will add single command of "docker compose up -d" to run all services.
 
 ## Short architecture overview:
+<img width="1672" height="487" alt="image" src="https://github.com/user-attachments/assets/43288142-993c-4696-9f00-75936e071b40" />
 
 The application follows a simple three-layer architecture using Node.js, Express, TypeScript, Prisma, and PostgreSQL.
 
