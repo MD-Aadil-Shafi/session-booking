@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,6 +42,12 @@ const getAllTimezones = () => {
 };
 
 const Auth = () => {
+  const {user} = useAppSelector(state => state.auth);
+  // console.log('loading', loading)
+  if(user.email){
+    return <Navigate to="/dashboard"/>
+  }
+
   const location = useLocation();
   const navigate = useNavigate();
   const isRegister = location.pathname === "/register";

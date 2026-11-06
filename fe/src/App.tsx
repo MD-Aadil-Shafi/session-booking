@@ -7,7 +7,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // routes
 const Loading = lazy(()=>import("./components/Loading"))
-const Home = lazy(()=> import("./pages/Home"))
 const Auth = lazy(()=> import("./pages/Auth"))
 const AuthRoutes = lazy(()=> import("./components/AuthRoutes"))
 
@@ -17,7 +16,7 @@ const App = () => {
     <BrowserRouter>
     <Suspense fallback={<Loading/>}>
     <Routes>
-      <Route index path='/' element={<Home/>}/>
+      <Route index path='/' element={<Auth/>}/>
       <Route path='/login' element={<Auth/>}/>
       <Route path='/register' element={<Auth/>}/>
       <Route path='*' element={<AuthRoutes/>}/>

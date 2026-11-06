@@ -10,6 +10,6 @@ const router = Router();
 
 router.get("/", authMiddleware(["MEMBER"]), listProfessionals);
 router.get("/:id", authMiddleware(["MEMBER"]), getProfessional);
-router.put("/:id/working-hours", authMiddleware(["PROFESSIONAL"]), setWorkingHours);
+router.put("/working-hours", authMiddleware(["PROFESSIONAL"]), setWorkingHours);
 
 export default router;

@@ -50,15 +50,15 @@ export const register = asyncHandler(async(req:Request, res:Response)=>{
             },
         });
         console.log("created User : ", user)
-        const {id, role} = user;
-        const token = generateAccessToken({id, role})
-        await generateRefreshToken({id, role}, res);
-        const {password, ...rest} = user;
+        // const {id, role} = user;
+        // const token = generateAccessToken({id, role})
+        // await generateRefreshToken({id, role}, res);
+        // const {password, ...rest} = user;
         res.status(200).json({
             status:true,
             message: "success",
-            token,
-            user:rest
+            // token,
+            // user:rest
         })
 
     }else{
@@ -85,12 +85,13 @@ export const login = asyncHandler(async(req:Request, res:Response)=>{
         }
         const {id, role} = user;
         const token = generateAccessToken({id, role})
-        await generateRefreshToken({id, role}, res);
+        const ref_token = await generateRefreshToken({id, role}, res);
         const {password, updatedAt, ...rest} = user;
         res.status(200).json({
             status:true,
             message: "success",
-            token,
+            access_token: token,
+            refresh_token:ref_token?.data,
             user:rest
         })
 
@@ -105,7 +106,14 @@ interface TokenPayload extends JwtPayload {
 }
 
 export const refreshToken = asyncHandler(async(req:Request, res:Response)=>{
-    const refToken = req.cookies.eventAuthRefToken;
+    // const refToken = req.cookies.eventAuthRefToken;
+    let refToken: string | null = null;
+
+    const headerToken = req?.headers?.refreshtoken;
+
+    if (typeof headerToken === "string") {
+    refToken = headerToken;
+    }
     if(!refToken) return res.status(400)
             .json({success:false, message: "Invalid Token."});
     
@@ -121,10 +129,11 @@ export const refreshToken = asyncHandler(async(req:Request, res:Response)=>{
     });
     //prisma returns the newly created records
     const accessToken = generateAccessToken({id:decoded.id, role:decoded.role});
-    await generateRefreshToken({id:decoded.id, role:decoded.role}, res)
-    return res.status(201).json({success:true, data:{
-        access_token: accessToken
-    }})
+    const ref_token = await generateRefreshToken({id:decoded.id, role:decoded.role}, res)
+    return res.status(201).json({success:true, 
+        access_token: accessToken,
+        refresh_token: ref_token?.data
+    })
 })
 
 

@@ -84,7 +84,8 @@ export const setWorkingHours = asyncHandler(
   async (req: Request, res: Response) => {
     //is express + ts it can be str or str[] so typecasting.
     // const professionalId = req.params.id;
-    const professionalId = String(req.params.id);
+    // const professionalId = String(req.params.id);
+    const professionalId = req.user.id;
     const hours: WorkingHourInput[] = req.body.hours;
 
     if (!Array.isArray(hours)) {
@@ -134,7 +135,7 @@ export const listProfessionals = asyncHandler(
         firstName: true,
         lastName: true,
         timezone: true,
-        workingHours: true,
+        // workingHours: true,
       },
     });
 
