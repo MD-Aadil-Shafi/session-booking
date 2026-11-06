@@ -11,7 +11,11 @@
     "dev:worker": "tsx watch src/workers/reminder.worker.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "start:worker": "node dist/workers/reminder.worker.js"
+    "start:worker": "node dist/workers/reminder.worker.js",
+    "db:migrate": "npx prisma migrate dev",
+    "db:deploy": "npx prisma migrate deploy",
+    "db:generate": "npx prisma generate",
+    "dev:all": "npm run db:migrate && concurrently \"npm:dev\" \"npm:dev:worker\""
   },
   "keywords": [],
   "author": "",
@@ -41,7 +45,6 @@
     "@types/pg": "^8.23.1",
     "@types/supertest": "^7.2.1",
     "@vitest/coverage-v8": "^5.1.0",
-    "concurrently": "^10.0.6",
     "prisma": "^7.9.1",
     "supertest": "^7.3.1",
     "ts-node-dev": "^2.0.0",
